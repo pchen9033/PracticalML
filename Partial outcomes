@@ -1,0 +1,56 @@
+n= 19622 
+
+node), split, n, loss, yval, (yprob)
+      * denotes terminal node
+
+ 1) root 19622 14042 A (0.28 0.19 0.17 0.16 0.18)  
+   2) roll_belt< 130.5 17977 12411 A (0.31 0.21 0.19 0.18 0.11)  
+     4) pitch_forearm< -33.95 1578    10 A (0.99 0.0063 0 0 0) *
+     5) pitch_forearm>=-33.95 16399 12401 A (0.24 0.23 0.21 0.2 0.12)  
+      10) magnet_dumbbell_y< 439.5 13870  9953 A (0.28 0.18 0.24 0.19 0.11)  
+        20) roll_forearm< 123.5 8643  5131 A (0.41 0.18 0.18 0.17 0.061) *
+        21) roll_forearm>=123.5 5227  3500 C (0.077 0.18 0.33 0.23 0.18) *
+      11) magnet_dumbbell_y>=439.5 2529  1243 B (0.032 0.51 0.043 0.22 0.19) *
+   3) roll_belt>=130.5 1645    14 E (0.0085 0 0 0 0.99) *
+
+
+
+> rfFit
+Random Forest 
+
+19622 samples
+   52 predictor
+    5 classes: 'A', 'B', 'C', 'D', 'E' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+
+Summary of sample sizes: 17660, 17660, 17659, 17659, 17660, 17659, ... 
+
+Resampling results across tuning parameters:
+
+  mtry  Accuracy  Kappa  Accuracy SD  Kappa SD
+   2    0.996     0.995  0.00136      0.00173 
+  27    0.995     0.994  0.00156      0.00197 
+  52    0.990     0.988  0.00278      0.00352 
+
+Accuracy was used to select the optimal model using  the largest value.
+The final value used for the model was mtry = 2. 
+
+
+> rfFit$finalModel
+
+Call:
+ randomForest(x = x, y = y, mtry = param$mtry, importance = ..1) 
+               Type of random forest: classification
+                     Number of trees: 500
+No. of variables tried at each split: 2
+
+        OOB estimate of  error rate: 0.44%
+Confusion matrix:
+     A    B    C    D    E  class.error
+A 5577    2    0    0    1 0.0005376344
+B   14 3779    4    0    0 0.0047405847
+C    0   17 3401    4    0 0.0061367621
+D    0    0   38 3176    2 0.0124378109
+E    0    0    0    5 3602 0.0013861935
