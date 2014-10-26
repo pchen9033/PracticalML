@@ -1,0 +1,32 @@
+setwd("D:/Coursera/PracticalMachineLearning")
+training = read.csv("pml-training.csv", header = TRUE)
+testing = read.csv("pml-testing.csv", header = TRUE)
+dim(training)
+summary(training)
+
+library(caret)
+#create a subset of interested variables
+myvar <- c("classe", grep("[xyz]$|^roll|^pitch|^yaw|^total", names(dat), value=TRUE))
+part <- training[,myvar]
+#first fit the model with a prediction tree
+modFit <- train(classe ~ .,method="rpart",data=part)
+print(modFit$finalModel)
+
+#then fit the random forest model with a cross validation method of K fold, which in our case K=10
+set.seed(1026)
+rfFit <- train(classe~ .,data=part,method="rf", trControl = trainControl(method = "cv",number = 10,repeats = 10), importance=T)
+imp <- varImp(rfFit)
+imp
+
+#use the random forest model to make predictions
+pred <- predict(rfFit,testing)
+
+#create a function to write predictions into individual file
+pml_write_files = function(x){
+  n = length(x)
+  for(i in 1:n){
+    filename = paste0("problem_id_",i,".txt")
+    write.table(x[i],file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)
+  }
+}
+pml_write_files(pred)
